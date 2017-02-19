@@ -1,6 +1,12 @@
 #!/usr/bin/python
+
+use_schedule = False
+
 import RPi.GPIO as GPIO
-import schedule
+
+if use_schedule == True:
+    import schedule
+
 import time
 import datetime
 
@@ -18,10 +24,15 @@ def job():
     GPIO.output(relay_pin, GPIO.LOW)  
     print datetime.datetime.now()
 
-#schedule.every(1).minutes.do(job)
-schedule.every().monday.at("15:30").do(job)
-schedule.every().friday.at("15:15").do(job)
-
+if use_schedule == True:
+    #schedule.every(1).minutes.do(job)
+    schedule.every().monday.at("15:30").do(job)
+    schedule.every().friday.at("15:15").do(job)
 while True:
-    schedule.run_pending()
-    time.sleep(1)
+    if use_schedule == True:
+        schedule.run_pending()
+        time.sleep(1)
+    else:
+        job()
+        time.sleep(5)   
+        
